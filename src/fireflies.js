@@ -70,6 +70,8 @@ export default class Fireflies {
     addEventListener('resize', resizeEH)
     addEventListener('mousemove', mouseEH)
     animationLoop()
+
+    return canvas;
   }
   static terminate() {
     cancelAnimationFrame(animationID)
