@@ -35,8 +35,8 @@ const animationLoop = _ => {
   mouse.prevY = mouse.y
 }
 const resizeEH = _ => {
-  canvas.width = window.innerWidth
-  canvas.height = window.innerHeight
+  canvas.width = document.body.offsetWidth
+  canvas.height = document.body.offsetHeight
 }
 const mouseEH = _ => {
   mouse.x = event.clientX
@@ -50,8 +50,8 @@ export default class Fireflies {
     canvas = document.createElement('canvas')
     parent.appendChild(canvas)
     c = canvas.getContext('2d') // Get context to access 2D canvas functions
-    canvas.width = window.innerWidth // Set canvas' width to full width of the window
-    canvas.height = window.innerHeight // Set canvas' height to full height of the window
+    canvas.width = document.body.offsetWidth // Set canvas' width to full width of the document
+    canvas.height = document.body.offsetHeight // Set canvas' height to full height of the document
     c.globalCompositeOperation = 'screen'
     for (let i = 0; i < quantity; i++){
       let r
