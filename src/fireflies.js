@@ -39,8 +39,8 @@ const resizeEH = _ => {
   canvas.height = document.body.offsetHeight
 }
 const mouseEH = _ => {
-  mouse.x = event.clientX
-  mouse.y = event.clientY
+  mouse.x = event.pageX
+  mouse.y = event.pageY
   mouse.counter = 0
 }
 
