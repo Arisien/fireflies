@@ -45,7 +45,7 @@ const mouseEH = _ => {
 }
 
 export default class Fireflies {
-  static initialize(quantity = Math.floor((window.innerHeight + window.innerWidth) / 100), radius = [5, 25 + Math.floor((window.innerHeight + window.innerWidth) / 100)], color = [{ fill: '#ffffea', glow: '#ff881b' }], collision = true, pulse = true, flicker = true, connect = false) {
+  static initialize(quantity = Math.floor((window.innerHeight + window.innerWidth) / 100), radius = [5, 25 + Math.floor((window.innerHeight + window.innerWidth) / 100)], color = [{ fill: '#ffffea', glow: '#ff881b' }], collision = true, push = true, pulse = true, flicker = true, connect = false) {
     this.terminate() // Terminates all previously initialized instances
     canvas = document.createElement('canvas')
     document.body.appendChild(canvas)
@@ -65,7 +65,7 @@ export default class Fireflies {
       const x = rng(r, canvas.width - r)
       const y = rng(r, canvas.height - r)
       const randomColor = rcg(color)
-      fireflies[i] = new Firefly(x, y, r, randomColor, collision, pulse, flicker, connect)
+      fireflies[i] = new Firefly(x, y, r, randomColor, collision, push, pulse, flicker, connect)
     }
     addEventListener('resize', resizeEH)
     addEventListener('mousemove', mouseEH)
@@ -84,7 +84,7 @@ export default class Fireflies {
   }
 }
 export class Firefly {
-  constructor(x, y, radius, color, collision, pulse, flicker, connect) {
+  constructor(x, y, radius, color, collision, push, pulse, flicker, connect) {
     this.x = x
     this.y = y
     this.radius = radius
@@ -105,6 +105,7 @@ export class Firefly {
     }
     this.collision = collision
     this.connect = connect
+    this.push = push
   }
   draw() {
     c.beginPath()
@@ -119,6 +120,7 @@ export class Firefly {
   }
   fly() {
     this.collide()
+    this.mousePush()
     this.stayWithinView() // Screenbound
     this.x += 0.75 * Math.cos(this.velocity.x) // The number is the speed modifier
     this.y += 0.75 * Math.sin(this.velocity.y) // The number is the speed modifier
@@ -142,7 +144,6 @@ export class Firefly {
   }
   collide() {
     if (this.collision) {
-      this.calcField()
       const thisIndex = fireflies.indexOf(this)
       for (let i = 0; i < fireflies.length; i++) {
         if (fireflies[i] != fireflies[thisIndex]) {
@@ -166,8 +167,8 @@ export class Firefly {
       }
     }
   }
-  calcField() {
-    if (!mouse.isMoving()) return
+  mousePush() {
+    if (!this.push || !mouse.isMoving()) return
 
     const k = 8 // Max velocity constant
 
