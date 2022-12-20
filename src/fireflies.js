@@ -50,6 +50,10 @@ export default class Fireflies {
     this.terminate() // Terminates all previously initialized instances
     mouse.offset = parent.getBoundingClientRect()
     canvas = document.createElement('canvas')
+    if (parent == document.body && !document.body.height) {
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+    }
     parent.appendChild(canvas)
     c = canvas.getContext('2d') // Get context to access 2D canvas functions
     canvas.width = document.body.offsetWidth // Set canvas' width to full width of the document
