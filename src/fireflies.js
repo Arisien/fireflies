@@ -35,23 +35,23 @@ const animationLoop = _ => {
   mouse.prevY = mouse.y
 }
 const resizeEH = _ => {
-  canvas.width = window.innerWidth
-  canvas.height = window.innerHeight
+  canvas.width = document.body.offsetWidth
+  canvas.height = document.body.offsetHeight
 }
 const mouseEH = _ => {
-  mouse.x = event.clientX
-  mouse.y = event.clientY
+  mouse.x = event.pageX
+  mouse.y = event.pageY
   mouse.counter = 0
 }
 
 export default class Fireflies {
-  static initialize(quantity = Math.floor((window.innerHeight + window.innerWidth) / 100), radius = [5, 25 + Math.floor((window.innerHeight + window.innerWidth) / 100)], color = [{ fill: '#ffffea', glow: '#ff881b' }], collision = true, pulse = true, flicker = true, connect = false, push = true) {
+  static initialize(quantity = Math.floor((window.innerHeight + window.innerWidth) / 100), radius = [5, 25 + Math.floor((window.innerHeight + window.innerWidth) / 100)], color = [{ fill: '#ffffea', glow: '#ff881b' }], collision = true, pulse = true, flicker = true, connect = false, push = true, parent = document.body) {
     this.terminate() // Terminates all previously initialized instances
     canvas = document.createElement('canvas')
-    document.body.appendChild(canvas)
+    parent.appendChild(canvas)
     c = canvas.getContext('2d') // Get context to access 2D canvas functions
-    canvas.width = window.innerWidth // Set canvas' width to full width of the window
-    canvas.height = window.innerHeight // Set canvas' height to full height of the window
+    canvas.width = document.body.offsetWidth // Set canvas' width to full width of the document
+    canvas.height = document.body.offsetHeight // Set canvas' height to full height of the document
     c.globalCompositeOperation = 'screen'
     for (let i = 0; i < quantity; i++){
       let r
@@ -70,6 +70,8 @@ export default class Fireflies {
     addEventListener('resize', resizeEH)
     addEventListener('mousemove', mouseEH)
     animationLoop()
+
+    return canvas;
   }
   static terminate() {
     cancelAnimationFrame(animationID)
