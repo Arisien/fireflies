@@ -6,6 +6,7 @@ const mouse = {
   y: undefined,
   prevX: undefined,
   prevY: undefined,
+  offset: undefined,
   counter: 0,
   isMoving: () => {
     if (mouse.counter > 50) return false
@@ -39,14 +40,15 @@ const resizeEH = _ => {
   canvas.height = document.body.offsetHeight
 }
 const mouseEH = _ => {
-  mouse.x = event.pageX
-  mouse.y = event.pageY
+  mouse.x = event.pageX - mouse.offset.x
+  mouse.y = event.pageY - mouse.offset.y
   mouse.counter = 0
 }
 
 export default class Fireflies {
   static initialize(quantity = Math.floor((window.innerHeight + window.innerWidth) / 100), radius = [5, 25 + Math.floor((window.innerHeight + window.innerWidth) / 100)], color = [{ fill: '#ffffea', glow: '#ff881b' }], collision = true, pulse = true, flicker = true, connect = false, push = true, parent = document.body) {
     this.terminate() // Terminates all previously initialized instances
+    mouse.offset = parent.getBoundingClientRect()
     canvas = document.createElement('canvas')
     parent.appendChild(canvas)
     c = canvas.getContext('2d') // Get context to access 2D canvas functions
